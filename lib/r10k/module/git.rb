@@ -60,6 +60,7 @@ class R10K::Module::Git < R10K::Module::Base
 
   def properties
     {
+      :module_name => name,
       :expected => @ref,
       :actual   => (@repo.head || "(unresolvable)"),
       :type     => :git,

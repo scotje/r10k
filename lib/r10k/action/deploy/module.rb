@@ -49,8 +49,12 @@ module R10K
 
         def visit_module(mod)
           if @argv.include?(mod.name)
+            started_at = Time.new
+
             logger.info "Deploying module #{mod.path}"
             mod.sync
+
+            write_module_info!(mod, started_at)
           else
             logger.debug1("Only updating modules #{@argv.inspect}, skipping module #{mod.name}")
           end
@@ -58,6 +62,23 @@ module R10K
 
         def allowed_initialize_opts
           super.merge(environment: true)
+        end
+
+        def write_module_info!(mod, started_at)
+          require 'pry'
+          binding.pry
+
+          File.open("#{mod.path}/.r10k-deploy.json", 'w') do |f|
+            # TODO: implement mod.info
+            deploy_info = {
+              :module_name => mod.name,
+              :signature => mod.version,
+              :started_at => started_at,
+              :finished_at => Time.new,
+            }
+
+            f.puts(JSON.pretty_generate(deploy_info))
+          end
         end
       end
     end

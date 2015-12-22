@@ -96,13 +96,29 @@ module R10K
         end
 
         def visit_module(mod)
+          started_at = Time.new
+
           logger.info "Deploying module #{mod.path}"
           mod.sync
+
+          write_module_info!(mod, started_at)
         end
 
         def write_environment_info!(environment, started_at)
           File.open("#{environment.path}/.r10k-deploy.json", 'w') do |f|
             deploy_info = environment.info.merge({
+              :started_at => started_at,
+              :finished_at => Time.new,
+            })
+
+            f.puts(JSON.pretty_generate(deploy_info))
+          end
+        end
+
+        def write_module_info!(mod, started_at)
+          File.open("#{mod.path}/.r10k-deploy.json", 'w') do |f|
+            # TODO: implement mod.info
+            deploy_info = mod.properties.merge({
               :started_at => started_at,
               :finished_at => Time.new,
             })
