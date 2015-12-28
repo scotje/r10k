@@ -101,6 +101,7 @@ module R10K
           logger.info "Deploying module #{mod.path}"
           mod.sync
 
+          # TODO: only write if updated?
           write_module_info!(mod, started_at)
         end
 
@@ -117,8 +118,8 @@ module R10K
 
         def write_module_info!(mod, started_at)
           File.open("#{mod.path}/.r10k-deploy.json", 'w') do |f|
-            # TODO: implement mod.info
             deploy_info = mod.properties.merge({
+              :signature => mod.repo.head,
               :started_at => started_at,
               :finished_at => Time.new,
             })

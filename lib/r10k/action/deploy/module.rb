@@ -65,17 +65,12 @@ module R10K
         end
 
         def write_module_info!(mod, started_at)
-          require 'pry'
-          binding.pry
-
           File.open("#{mod.path}/.r10k-deploy.json", 'w') do |f|
-            # TODO: implement mod.info
-            deploy_info = {
-              :module_name => mod.name,
-              :signature => mod.version,
+            deploy_info = mod.properties.merge({
+              :signature => mod.repo.head,
               :started_at => started_at,
               :finished_at => Time.new,
-            }
+            })
 
             f.puts(JSON.pretty_generate(deploy_info))
           end
