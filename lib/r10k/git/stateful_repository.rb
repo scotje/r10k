@@ -42,21 +42,16 @@ class R10K::Git::StatefulRepository
       raise R10K::Git::UnresolvableRefError.new("Unable to sync repo to unresolvable ref '#{@ref}'", :git_dir => @repo.git_dir)
     end
 
-    case status(sha)
-    when :insync
-      logger.debug { "#{@repo.path} is already at Git ref #{@ref}" }
-    else
-      if status == :absent || status == :mismatched
-        FileUtils.remove_entry_secure(@worktree, true)
-        FileUtils.mkdir_p(@worktree)
-      end
-
-      logger.debug { "Updating #{@repo.path} to #{@ref}" }
-      @cache.repo.send(:git, ["reset", "--hard", sha], { :work_tree => @worktree, :git_dir => @cache.repo.git_dir.to_s })
-
-      # FIXME: this should maybe be controlled by an option and happen in all cases if set
-      @cache.repo.send(:git, ["clean", "--force"], { :work_tree => @worktree, :git_dir => @cache.repo.git_dir.to_s })
+    if !File.directory?(@worktree) || !File.exists?(File.join(@worktree, '.r10k-deploy.json'))
+      FileUtils.remove_entry_secure(@worktree, true)
+      FileUtils.mkdir_p(@worktree)
     end
+
+    logger.debug { "Ensuring #{@repo.path} is at #{@ref}" }
+    @cache.repo.send(:git, ["reset", "--hard", sha], { :work_tree => @worktree, :git_dir => @cache.repo.git_dir.to_s })
+
+    # FIXME: this should maybe be controlled by an option
+    @cache.repo.send(:git, ["clean", "--force", "-e", ".r10k-deploy.json"], { :work_tree => @worktree, :git_dir => @cache.repo.git_dir.to_s })
   end
 
   def status(target_sha=nil)
