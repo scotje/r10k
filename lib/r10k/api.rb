@@ -128,31 +128,33 @@ module R10K
     # Update local cache represented by the given module_source hashmap.
     #
     # @param module_source [Hash] A hashmap representing a single remote module source (as produced by {#module_sources_for_environment})
+    # @param cachedir [String] Base path where caches are stored.
+    # @param opts [Hash] Additional options as defined.
     # @return [true] Returns true on success, raises on failure.
     # @raise [RuntimeError] Something bad happened!
-    def update_cache(module_source)
+    def update_module_cache(module_source, cachedir, opts={})
     end
 
     # Update local cache of the given remote VCS repository.
     #
     # @param remote [String] URI for the remote repository which should be cached or updated.
+    # @param cachedir [String] Base path where caches are stored.
     # @param opts [Hash] Additional options as defined.
-    # @option opts [String] :cachedir Base path where caches are stored.
     # @return [true] Returns true on success, raises on failure.
     # @raise [RuntimeError] Something bad happened!
-    def update_vcs_cache(remote, opts={})
+    def update_vcs_cache(remote, cachedir, opts={})
     end
 
     # Update local cache of the given module from the Puppet Forge.
     #
     # @param module_slug [String] Hyphen separated namespace and module name of the module to be cached or updated. (E.g. "puppetlabs-apache")
+    # @param cachedir [String] Base path where caches are stored.
     # @param opts [Hash] Additional options as defined.
-    # @option opts [String] :cachedir Base path where caches are stored.
     # @option opts [String] :proxy An optional proxy server to use when downloading modules from the Forge.
     # @option opts [String] :baseurl The URL to the Puppet Forge to use for downloading modules.
     # @return [true] Returns true on success, raises on failure.
     # @raise [RuntimeError] Something bad happened!
-    def update_forge_cache(module_slug, opts={})
+    def update_forge_cache(module_slug, cachedir, opts={})
     end
 
     # Given an environment map, returns a new environment map with any ambiguous module versions (e.g. branch names, version ranges, etc.)
