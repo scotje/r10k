@@ -153,6 +153,21 @@ mod 'apache',
   :branch => 'docs_experiment'
 ```
 
+#### SSH Transport
+
+Git content can be installed over Git's SSH transport mechanism as well.
+If you are using the 'shellgit' provider, SSH keys and other configuration
+from your `~/.ssh/config` will be respected. If you are using the 'rugged'
+provider, you will need to configure SSH keys in r10k.yaml. (See the
+[configuration documentation](doc/dynamic-environments/configuration.mkd#private_key)
+for more details.)
+
+```ruby
+# Install puppetlabs/apache using Git SSH transport
+mod 'apache',
+  :git    => 'git@github.com:puppetlabs/puppetlabs-apache.git'
+```
+
 #### Control Repo Branch Tracking
 
 Since r10k 2.4.0, the `:branch` option can be set to the special value
