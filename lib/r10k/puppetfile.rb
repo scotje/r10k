@@ -86,6 +86,7 @@ class Puppetfile
   # @param [String] forge
   def set_forge(forge)
     @forge = forge
+    PuppetForge.host = forge
   end
 
   # @param [String] moduledir
