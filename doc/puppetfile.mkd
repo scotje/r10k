@@ -51,8 +51,7 @@ handles modules.
 ### forge
 
 The `forge` setting specifies which server that Forge based modules are fetched
-from. This is currently a noop and is provided for compatibility with
-librarian-puppet.
+from. This is provided for compatibility with librarian-puppet.
 
 ### moduledir
 
