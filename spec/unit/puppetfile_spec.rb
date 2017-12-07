@@ -16,6 +16,10 @@ describe R10K::Puppetfile do
     it "is the basedir joined with '/Puppetfile.r10k' path" do
       expect(subject.puppetfile_path).to eq '/some/nonexistent/basedir/Puppetfile.r10k'
     end
+
+    it "has the default forge URI" do
+      expect(subject).to have_attributes(:forge => 'forgeapi.puppetlabs.com')
+    end
   end
 
 end
@@ -232,14 +236,17 @@ describe R10K::Puppetfile do
       path = File.join(PROJECT_ROOT, 'spec', 'fixtures', 'unit', 'puppetfile', 'alternate-forge')
       pf_path = File.join(path, 'Puppetfile')
       subject = described_class.new(path)
-      # Expect default forge
-      expect(subject).to have_attributes(:forge => 'forgeapi.puppetlabs.com')
       expect { subject.load! }.not_to raise_error
-      # Expect alternate forge
       expect(subject).to have_attributes(:forge => 'http://myforge.domain.com/')
-      # Another test (not sure if this is needed)
-      expect(PuppetForge).to receive(:host=).with('https://my.site.forge')
-      subject.set_forge('https://my.site.forge')
+    end
+
+    it "accepts alternate host" do
+      path = File.join(PROJECT_ROOT, 'spec', 'fixtures', 'unit', 'puppetfile', 'alternate-forge')
+      pf_path = File.join(path, 'Puppetfile')
+      subject = described_class.new(path)
+      expect { subject.load! }.not_to raise_error
+      subject.set_forge('https://my.site.forge/')
+      expect(PuppetForge).to have_attributes(:host => 'https://my.site.forge/')
     end
   end
 
