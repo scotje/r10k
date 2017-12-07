@@ -237,16 +237,8 @@ describe R10K::Puppetfile do
       pf_path = File.join(path, 'Puppetfile')
       subject = described_class.new(path)
       expect { subject.load! }.not_to raise_error
-      expect(subject).to have_attributes(:forge => 'http://myforge.domain.com/')
-    end
-
-    it "accepts alternate host" do
-      path = File.join(PROJECT_ROOT, 'spec', 'fixtures', 'unit', 'puppetfile', 'alternate-forge')
-      pf_path = File.join(path, 'Puppetfile')
-      subject = described_class.new(path)
-      expect { subject.load! }.not_to raise_error
-      subject.set_forge('https://my.site.forge/')
-      expect(PuppetForge).to have_attributes(:host => 'https://my.site.forge/')
+      expect(subject).to have_attributes(:forge_url => 'http://myforge.domain.com/')
+      expect(PuppetForge).to have_attributes(:host => 'http://myforge.domain.com/')
     end
   end
 
