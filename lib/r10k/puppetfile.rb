@@ -13,10 +13,6 @@ class Puppetfile
   #   @return [String] The URL to use for the Puppet Forge
   attr_reader :forge
 
-  # @!attribute [r] forge_url
-  #   @return [String] The URL to use for the Puppet Forge
-  attr_reader :forge_url
-
   # @!attribute [r] modules
   #   @return [Array<R10K::Module>]
   attr_reader :modules
@@ -51,8 +47,6 @@ class Puppetfile
 
     @modules = []
     @managed_content = {}
-    @forge   = 'forgeapi.puppetlabs.com'
-    @forge_url = @forge
 
     @loaded = false
   end
@@ -90,13 +84,11 @@ class Puppetfile
 
   # @param [String] forge
   def set_forge(forge)
-    @forge = forge
-  end
+    unless @forge.nil?
+      raise R10K::Error.new(_('You cannot declare multiple \'forge\' settings in the same Puppetfile'))
+    end
 
-  # @param [String] forge_url
-  def set_forge(forge_url)
-    @forge_url = forge_url
-    PuppetForge.host = forge_url
+    @forge = forge
   end
 
   # @param [String] moduledir
@@ -207,10 +199,6 @@ class Puppetfile
     end
 
     def forge(location)
-      @librarian.set_forge(location)
-    end
-
-    def forge_url(location)
       @librarian.set_forge(location)
     end
 

@@ -1,3 +1,2 @@
-forge 'http://forge.puppetlabs.com/'
-forge_url 'http://myforge.domain.com/'
+forge 'http://forge.example.com/'
 mod 'puppetlabs/stdlib'
